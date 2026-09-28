@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TRUSTCARD – Verify Before You Trust</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f8ff;--card:#fff;--tx:#0b1f44;--mu:#5b6b8c;--bl:#1d5fe0;--bl2:#e6efff;--bd:#dbe6fa;--g:#16a34a;--y:#f59e0b;--r:#e5383b;--sh:0 8px 28px rgba(29,95,224,.10)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1428;--card:#101d38;--tx:#eaf1ff;--mu:#9db0d3;--bl2:#17284b;--bd:#22365f;--sh:0 8px 28px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0a1428;--card:#101d38;--tx:#eaf1ff;--mu:#9db0d3;--bl2:#17284b;--bd:#22365f;--sh:0 8px 28px rgba(0,0,0,.4)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.logo{font-weight:800;font-size:22px;letter-spacing:1px;color:var(--bl);display:flex;align-items:center;gap:8px}
+.tag{font-size:12px;color:var(--mu)}
+.sp{flex:1}
+.ib{border:1px solid var(--bd);background:var(--bl2);color:var(--bl);border-radius:12px;width:40px;height:40px;font-size:18px;cursor:pointer}
+main{max-width:980px;margin:0 auto;padding:18px}
+.pg{display:none;animation:in .35s ease}.pg.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{font-size:26px;margin:6px 0}h2{margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px;box-shadow:var(--sh)}
+.vc{text-align:center;transition:.25s}.vc:hover{transform:translateY(-4px)}
+.vc .ic{font-size:40px;width:76px;height:76px;border-radius:22px;background:var(--bl2);display:grid;place-items:center;margin:0 auto 10px}
+.btn{background:var(--bl);color:#fff;border:0;border-radius:12px;padding:11px 18px;font-weight:600;cursor:pointer;font-size:14px}
+.btn.o{background:var(--bl2);color:var(--bl)}.btn.d{background:var(--r)}.btn:hover{filter:brightness(1.08)}
+input,select,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;margin:4px 0 10px}
+label{font-size:12px;font-weight:600;color:var(--mu)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>input{flex:1;min-width:150px}
+.chip{border:1px solid var(--bd);background:var(--bl2);color:var(--bl);padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;font-weight:600}
+.run{font-size:18px;padding:14px 40px;border-radius:99px;box-shadow:0 0 0 0 rgba(29,95,224,.5);animation:pu 1.8s infinite}
+@keyframes pu{70%{box-shadow:0 0 0 14px rgba(29,95,224,0)}}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.st{font-size:12px;padding:5px 10px;border-radius:99px;background:var(--bl2);color:var(--mu)}.st.on{background:var(--bl);color:#fff}.st.dn{color:var(--g)}
+.ac{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ac .card{padding:14px}.bar{height:8px;background:var(--bl2);border-radius:9px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;width:0;background:var(--bl);transition:width 1s}
+.gw{text-align:center;margin:10px 0}.gw svg{max-width:280px;width:100%}
+.num{font-size:44px;font-weight:800}.band{font-weight:800;letter-spacing:1px}
+.hi{color:var(--g)}.md{color:var(--y)}.lo{color:var(--r)}
+.li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--bd);font-size:14px}.li:last-child{border:0}
+.side{position:fixed;top:0;bottom:0;left:0;width:270px;background:var(--card);z-index:40;padding:20px;transform:translateX(-105%);transition:.3s;box-shadow:var(--sh);padding-top:calc(20px + env(safe-area-inset-top,0px))}.side.on{transform:none}
+.side a{display:block;padding:12px;border-radius:12px;cursor:pointer;font-weight:600;color:var(--tx)}.side a:hover{background:var(--bl2);color:var(--bl)}
+.ov{position:fixed;inset:0;background:rgba(5,15,40,.4);z-index:30;display:none}.ov.on{display:block}
+#ai{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50}
+#fab{width:60px;height:60px;border-radius:50%;border:0;background:linear-gradient(135deg,#1d5fe0,#5aa2ff);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 8px 24px rgba(29,95,224,.5);animation:fl 3s infinite}
+@keyframes fl{50%{transform:translateY(-5px)}}
+#tip{position:absolute;right:70px;bottom:10px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:8px 12px;font-size:13px;white-space:nowrap;box-shadow:var(--sh)}
+#panel{display:none;position:absolute;right:0;bottom:72px;width:min(340px,calc(100vw - 36px));height:440px;background:var(--card);border:1px solid var(--bd);border-radius:20px;box-shadow:var(--sh);flex-direction:column;overflow:hidden;animation:in .3s}
+#panel.on{display:flex}#ph{background:var(--bl);color:#fff;padding:12px 14px;font-weight:700;display:flex;justify-content:space-between}
+#msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:85%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.4}.m.a{background:var(--bl2);align-self:flex-start}.m.u{background:var(--bl);color:#fff;align-self:flex-end}
+#ci{display:flex;gap:6px;padding:10px;border-top:1px solid var(--bd)}#ci input{margin:0}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px;text-align:left;border-bottom:1px solid var(--bd)}
+.pill{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;color:#fff}
+.note{font-size:12px;color:var(--mu);background:var(--bl2);padding:8px 12px;border-radius:12px}
+.pv img{max-width:100%;max-height:180px;border-radius:12px;margin-top:6px}
+@media print{header,#ai,.side,.noprint{display:none!important}}
+</style></head><body>
+<header><button class="ib" onclick="side(1)" aria-label="Menu">⋮</button>
+<div><div class="logo">🛡️ TRUSTCARD</div><div class="tag">AI-Powered Digital Trust &amp; Social Media Safety</div></div><div class="sp"></div>
+<span class="pill" style="background:var(--bl);white-space:nowrap">DEMO MODE</span><button class="ib" onclick="go('help')" title="Help">❓</button><button class="ib" onclick="toggleAI()" title="Mini AI">🤖</button></header>
+<div class="ov" id="ov" onclick="side(0)"></div>
+<nav class="side" id="side"><div class="logo" style="margin-bottom:14px">🛡️ TRUSTCARD</div>
+<a onclick="go('home')">🏠 Home</a><a onclick="go('ig')">📸 Instagram Check</a><a onclick="go('em')">✉️ Email Check</a><a onclick="go('li')">💼 LinkedIn Check</a><a onclick="go('hist')">🕘 History</a><a onclick="go('help')">🆘 Help &amp; Safety</a><a onclick="go('cmp')">🚨 Cybersecurity Complaint</a><a onclick="go('set')">⚙️ Settings</a></nav>
+<main>
+<section class="pg on" id="p-home"><h1>Verify Before You Trust.</h1><div class="tag">Evidence-based Trust Scores — never a simple “real / fake” verdict.</div>
+<div class="grid">
+<div class="card vc"><div class="ic">📸</div><h2>Instagram Verification</h2><p class="tag">Verify Social Media Profile</p><button class="btn" onclick="go('ig')">Check Instagram</button></div>
+<div class="card vc"><div class="ic">✉️</div><h2>Email Verification</h2><p class="tag">Verify Email Identity</p><button class="btn" onclick="go('em')">Check Email</button></div>
+<div class="card vc"><div class="ic">💼</div><h2>LinkedIn Verification</h2><p class="tag">Verify Professional Identity</p><button class="btn" onclick="go('li')">Check LinkedIn</button></div></div>
+<p class="note" style="margin-top:16px">Prototype notice: scores come from a rule-based evidence engine plus <b>mock sample data</b>. No live Instagram/LinkedIn/email APIs are called, and results are not proof that an account is genuine or fake.</p></section>
+
+<section class="pg" id="p-ig"><h1>Instagram Trust Verification</h1>
+<div class="card"><label>Instagram Username</label><div class="row"><input id="igu" placeholder="@username"><button class="chip" onclick="voice('igu')">🎤 Voice</button></div>
+<div class="row demo"><span class="tag">Demo:</span><button class="chip" onclick="q('igu','priya.designs')">High</button><button class="chip" onclick="q('igu','travel_diaries22')">Medium</button><button class="chip" onclick="q('igu','free_iphone_giveaway_99')">Low</button></div>
+<div style="text-align:center;margin-top:12px"><button class="btn run" onclick="runIG()">▶ RUN ANALYSIS</button></div></div><div id="s-ig"></div></section>
+
+<section class="pg" id="p-em"><h1>Email Trust Verification</h1>
+<div class="card"><label>Email Address</label><input id="eme" placeholder="recruiter@company.com">
+<label>Claimed company (optional)</label><input id="emc" placeholder="e.g. Infosys">
+<label>Visible message text (optional – paste from the email; enables keyword analysis)</label><textarea id="emt" rows="3"></textarea>
+<div class="row"><button class="chip" onclick="$('eme').focus()">Enter Email</button><button class="chip" onclick="$('emf').click()">Upload Screenshot</button><button class="chip" onclick="$('emf2').click()">Take / Attach Image</button></div><input type="file" id="emf2" accept="image/*" capture hidden onchange="$('emf').files=this.files;prev(this,'emp')"><label>Screenshot</label><input type="file" id="emf" accept="image/*" onchange="prev(this,'emp')"><div class="pv" id="emp"></div>
+<div class="row demo"><span class="tag">Demo:</span><button class="chip" onclick="demoEm(0)">Legitimate</button><button class="chip" onclick="demoEm(1)">Look-alike</button></div>
+<div style="text-align:center"><button class="btn run" onclick="runEM()">▶ RUN EMAIL ANALYSIS</button></div></div><div id="s-em"></div></section>
+
+<section class="pg" id="p-li"><h1>LinkedIn Trust Verification</h1>
+<div class="card"><label>LinkedIn Profile URL / Username</label><input id="liu"><label>Company Name</label><input id="lic"><label>Company Address</label><input id="lia"><label>Job Offer / Job Posting URL</label><input id="lij">
+<label>Offer text (optional)</label><textarea id="lit" rows="2"></textarea><label>Screenshot</label><input type="file" id="lif" accept="image/*" onchange="prev(this,'lip')"><div class="pv" id="lip"></div>
+<div class="row demo"><span class="tag">Demo:</span><button class="chip" onclick="demoLi(0)">Verified company</button><button class="chip" onclick="demoLi(1)">Suspicious offer</button></div>
+<div style="text-align:center"><button class="btn run" onclick="runLI()">▶ RUN LINKEDIN ANALYSIS</button></div></div><div id="s-li"></div></section>
+
+<section class="pg" id="p-hist"><h1>Verification History</h1><div class="row"><input id="hq" placeholder="Search…" oninput="hist()"><select id="hf" onchange="hist()" style="width:auto"><option value="">All platforms</option><option>Instagram</option><option>Email</option><option>LinkedIn</option></select></div><div class="card" style="overflow:auto"><table id="ht"></table></div></section>
+<section class="pg" id="p-rep"><div id="rep"></div></section>
+<section class="pg" id="p-cmp"><h1>Cybersecurity Complaint</h1><div class="card" id="cf"></div></section>
+<section class="pg" id="p-help"><h1>Help &amp; Safety</h1><div class="card"><div class="li">🔒 Never share OTPs, passwords or payment details with recruiters or “support” accounts.</div><div class="li">💸 Genuine employers do not ask for registration, training or processing fees.</div><div class="li">🔎 Check job offers on the company’s official website and careers page.</div><div class="li">🌐 Inspect email domains carefully for look-alike spellings.</div><div class="li">🚨 In India, report cyber fraud at cybercrime.gov.in or call 1930.</div></div></section>
+<section class="pg" id="p-set"><h1>Settings</h1><div class="card"><label>Mini AI language</label><select id="sl" onchange="setLang(this.value)"><option value="en">English</option><option value="ta">தமிழ் (Tamil)</option><option value="te">తెలుగు (Telugu)</option><option value="hi">हिंदी (Hindi)</option></select>
+<label>Demo mode</label><select onchange="document.querySelectorAll('.demo').forEach(e=>e.style.display=this.value=='1'?'flex':'none')"><option value="1">On</option><option value="0">Off</option></select>
+<label>Theme</label><select onchange="document.documentElement.dataset.theme=this.value"><option value="light">Light</option><option value="dark">Dark</option></select></div></section>
+</main>
+
+<div id="ai"><div id="tip">Hi! How can I help you?</div><div id="panel"><div id="ph"><span>🤖 Mini AI</span><span style="cursor:pointer" onclick="toggleAI()">✕</span></div><div id="msgs"></div>
+<div class="row" style="padding:6px 10px 0"><button class="chip" onclick="voice('cin')">🎙 Speak</button><button class="chip" onclick="$('cin').focus()">⌨ Type</button><button class="chip" onclick="tv(this)">🔊 AI Voice: On</button></div><div id="ci"><input id="cin" placeholder="Type or tap 🎤" onkeydown="if(event.key=='Enter')send()"><button class="btn" onclick="send()">➤</button></div></div>
+<button id="fab" onclick="toggleAI()" aria-label="Mini AI">🤖</button></div>
+
+<script>
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let lang='en',L=null,H=[],last=null,wait=null,seq=0;
+const bandT=s=>s>=80?'HIGH TRUST':s>=50?'MEDIUM TRUST':'LOW TRUST',bandC=s=>s>=80?'hi':s>=50?'md':'lo',col=s=>s>=80?'var(--g)':s>=50?'var(--y)':'var(--r)';
+const I={en:{hi:"Hi! How can I help you?",q:"Which language are you comfortable with?",ig:"Sure. Let's start Instagram verification. Please tell me the Instagram username.",em:"Sure. Please enter the email address (and optionally upload a screenshot), then press RUN.",li:"Sure. Please fill in the LinkedIn profile and company details, then press RUN.",got:u=>`Got it: @${u}. Press RUN to start the analysis.`,o:"I can help check Instagram, email or LinkedIn. Which one would you like?",r:s=>`Analysis complete. Your Trust Score is ${s} out of 100. `,b:["This profile appears potentially suspicious based on the available evidence. Please verify through official sources before interacting further.","Some signals need further verification.","The profile shows high-trust signals based on the available evidence."]},
+ta:{hi:"வணக்கம்! உங்களுக்கு என்ன உதவி வேண்டும்?",q:"எந்த மொழியில் பேச விரும்புகிறீர்கள்?",ig:"சரி. Instagram profile verification-ஐ தொடங்கலாம். உங்கள் Instagram username-ஐ சொல்லுங்கள்.",em:"சரி. Email முகவரியை உள்ளிடவும், தேவைப்பட்டால் screenshot பதிவேற்றி RUN அழுத்தவும்.",li:"சரி. LinkedIn மற்றும் company விவரங்களை நிரப்பி RUN அழுத்தவும்.",got:u=>`சரி, @${u}. பகுப்பாய்வை தொடங்க RUN அழுத்தவும்.`,o:"Instagram, Email அல்லது LinkedIn சரிபார்க்க உதவ முடியும். எது வேண்டும்?",r:s=>`பகுப்பாய்வு முடிந்தது. உங்கள் Trust Score 100-க்கு ${s}. `,b:["கிடைக்கும் ஆதாரங்களின்படி இந்த profile சந்தேகத்துக்குரியதாக தெரிகிறது. தொடர்வதற்கு முன் அதிகாரப்பூர்வ வழிகளில் சரிபார்க்கவும்.","சில அறிகுறிகளை கூடுதலாக சரிபார்க்க வேண்டும்.","கிடைக்கும் ஆதாரங்களின்படி இந்த profile-ல் உயர் நம்பகத்தன்மை அறிகுறிகள் உள்ளன."]},
+te:{hi:"నమస్కారం! నేను మీకు ఎలా సహాయం చేయగలను?",q:"మీరు ఏ భాషలో సౌకర్యంగా ఉంటారు?",ig:"సరే. Instagram ధృవీకరణ ప్రారంభిద్దాం. మీ Instagram username చెప్పండి.",em:"సరే. Email చిరునామా ఇవ్వండి (కావాలంటే screenshot అప్‌లోడ్ చేయండి), తర్వాత RUN నొక్కండి.",li:"సరే. LinkedIn మరియు company వివరాలు నింపి RUN నొక్కండి.",got:u=>`సరే, @${u}. విశ్లేషణ ప్రారంభించడానికి RUN నొక్కండి.`,o:"Instagram, Email లేదా LinkedIn తనిఖీ చేయడంలో సహాయం చేస్తాను. ఏది కావాలి?",r:s=>`విశ్లేషణ పూర్తైంది. మీ Trust Score 100కి ${s}. `,b:["అందుబాటులో ఉన్న ఆధారాల ప్రకారం ఈ ప్రొఫైల్ అనుమానాస్పదంగా కనిపిస్తోంది. ముందుకు వెళ్లే ముందు అధికారిక మార్గాల్లో ధృవీకరించండి.","కొన్ని సంకేతాలను మరింతగా ధృవీకరించాలి.","అందుబాటులో ఉన్న ఆధారాల ప్రకారం ఈ ప్రొఫైల్‌లో అధిక నమ్మకం సంకేతాలు ఉన్నాయి."]},
+hi:{hi:"नमस्ते! मैं आपकी कैसे मदद कर सकता हूँ?",q:"आप किस भाषा में सहज हैं?",ig:"ठीक है। Instagram सत्यापन शुरू करते हैं। कृपया अपना Instagram username बताइए।",em:"ठीक है। Email पता दर्ज करें (चाहें तो screenshot अपलोड करें) और RUN दबाएँ।",li:"ठीक है। LinkedIn और company की जानकारी भरकर RUN दबाएँ।",got:u=>`ठीक है, @${u}। जाँच शुरू करने के लिए RUN दबाएँ।`,o:"मैं Instagram, Email या LinkedIn जाँचने में मदद कर सकता हूँ। कौन सा चाहिए?",r:s=>`विश्लेषण पूरा हुआ। आपका Trust Score 100 में से ${s} है। `,b:["उपलब्ध सबूतों के अनुसार यह प्रोफ़ाइल संदिग्ध लग रही है। आगे बढ़ने से पहले आधिकारिक स्रोतों से सत्यापित करें।","कुछ संकेतों की और जाँच ज़रूरी है।","उपलब्ध सबूतों के अनुसार इस प्रोफ़ाइल में उच्च भरोसे के संकेत हैं।"]}};
+const RC={en:'en-IN',ta:'ta-IN',te:'te-IN',hi:'hi-IN'};
+let tts=true;const AI={mode:null,target:null};
+Object.assign(I.en,{w:"Please tell me what you want to verify.",lq:"Sure. Please tell me the LinkedIn profile or company name.",rd:"Your details are ready. Shall I start the analysis?",ok:"Okay. Press RUN whenever you are ready.",nv:"Voice input is unavailable on this device. You can type your response instead.",ls:"Listening…"});
+Object.assign(I.ta,{w:"எதை சரிபார்க்க வேண்டும் என்று சொல்லுங்கள்.",lq:"சரி. LinkedIn profile அல்லது company பெயரை சொல்லுங்கள்.",rd:"உங்கள் விவரங்கள் தயார். பகுப்பாய்வை தொடங்கவா?",ok:"சரி. தயாரானதும் RUN அழுத்தவும்.",nv:"இந்த சாதனத்தில் குரல் உள்ளீடு கிடைக்கவில்லை. தயவுசெய்து தட்டச்சு செய்யுங்கள்.",ls:"கேட்கிறேன்…",r:s=>`அனலைசிஸ் முடிந்தது. உங்கள் Trust Score ${s} out of 100. `});
+I.ta.b[0]="கிடைத்த தகவல்களில் சில சந்தேகத்திற்குரிய அறிகுறிகள் உள்ளன. தொடர்ந்து தொடர்பு கொள்வதற்கு முன் அதிகாரப்பூர்வ தகவல்களை சரிபார்க்கவும்.";
+Object.assign(I.te,{w:"మీరు ఏమి ధృవీకరించాలనుకుంటున్నారో చెప్పండి.",lq:"సరే. LinkedIn ప్రొఫైల్ లేదా company పేరు చెప్పండి.",rd:"మీ వివరాలు సిద్ధంగా ఉన్నాయి. విశ్లేషణ ప్రారంభించమంటారా?",ok:"సరే. సిద్ధమైనప్పుడు RUN నొక్కండి.",nv:"ఈ పరికరంలో వాయిస్ ఇన్‌పుట్ అందుబాటులో లేదు. దయచేసి టైప్ చేయండి.",ls:"వింటున్నాను…"});
+Object.assign(I.hi,{w:"कृपया बताइए आप क्या सत्यापित करना चाहते हैं।",lq:"ठीक है। कृपया LinkedIn प्रोफ़ाइल या company का नाम बताइए।",rd:"आपकी जानकारी तैयार है। क्या मैं विश्लेषण शुरू करूँ?",ok:"ठीक है। तैयार होने पर RUN दबाएँ।",nv:"इस डिवाइस पर वॉइस इनपुट उपलब्ध नहीं है। कृपया टाइप करें।",ls:"सुन रहा हूँ…"});
+function say(t,who='a'){const d=document.createElement('div');d.className='m '+who;d.textContent=t;$('msgs').append(d);$('msgs').scrollTop=1e9;if(who=='a'&&tts&&window.speechSynthesis&&$('panel').classList.contains('on')){try{const u=new SpeechSynthesisUtterance(t);u.lang=RC[lang];speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}return d}
+function tv(b){tts=!tts;b.textContent=tts?'🔊 AI Voice: On':'🔇 AI Voice: Off';if(!tts&&window.speechSynthesis)speechSynthesis.cancel()}
+function toggleAI(){const p=$('panel');p.classList.toggle('on');$('tip').style.display='none';if(p.classList.contains('on')&&!$('msgs').children.length){say(I.en.hi);say(I.en.q);const c=document.createElement('div');c.className='row';[['en','English'],['ta','தமிழ்'],['te','తెలుగు'],['hi','हिंदी']].forEach(([k,n])=>{const b=document.createElement('button');b.className='chip';b.textContent=n;b.onclick=()=>{setLang(k);c.remove()};c.append(b)});$('msgs').append(c)}}
+function setLang(k){lang=k;L=I[k];$('sl').value=k;say(L.hi);say(L.w)}
+function send(){const v=$('cin').value.trim();if(!v)return;$('cin').value='';say(v,'u');reply(v)}
+const fix=v=>v.trim().replace(/\s+underscore\s+/gi,'_').replace(/\s+dot\s+/gi,'.').replace(/\s+at\s+/gi,'@');
+function ask(t){AI.mode='cf';AI.target=t;say(L.rd)}
+function reply(v){if(!L)setLang('en');const m=AI.mode;
+if(m=='ig'){go('ig');$('igu').value=fix(v).replace(/^@/,'').replace(/\s+/g,'').toLowerCase();return ask('ig')}
+if(m=='em'){go('em');$('eme').value=fix(v).replace(/\s+/g,'').toLowerCase();return ask('em')}
+if(m=='li'){go('li');const x=fix(v);if(/linkedin\.com|\/in\//i.test(x))$('liu').value=x.replace(/\s+/g,'');else $('lic').value=x;return ask('li')}
+if(m=='cf'){AI.mode=null;if(/yes|ok|sure|start|ஆம்|சரி|ஆரம்ப|అవును|సరే|हाँ|हां|शुरू|ठीक/i.test(v))return({ig:runIG,em:runEM,li:runLI})[AI.target]();return say(L.ok)}
+if(/insta/i.test(v)){go('ig');AI.mode='ig';say(L.ig)}else if(/mail/i.test(v)){go('em');AI.mode='em';say(L.em)}else if(/linked|job/i.test(v)){go('li');AI.mode='li';say(L.lq)}else say(L.w)}
+function voice(id){if(!L)setLang('en');if(!$('panel').classList.contains('on'))toggleAI();if(id=='igu')AI.mode='ig';
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition,nv=()=>{say(L.nv);$('cin').focus()};if(!SR)return nv();
+const b=say('🎙 '+L.ls),r=new SR();r.lang=RC[lang];
+r.onresult=e=>{b.remove();const t=e.results[0][0].transcript;say(t,'u');reply(t)};r.onerror=r.onnomatch=()=>{b.remove();nv()};r.onend=()=>{if(b.isConnected)b.remove()};
+try{r.start()}catch(e){b.remove();nv()}}
+function exp(){const t=[...document.querySelectorAll('#cf input,#cf textarea')].map(e=>e.value).join('\n');try{navigator.clipboard.writeText(t);alert('Complaint details copied to clipboard.')}catch(e){prompt('Copy your complaint details:',t)}}
+function side(o){$('side').classList.toggle('on',!!o);$('ov').classList.toggle('on',!!o)}
+function go(p){side(0);document.querySelectorAll('.pg').forEach(e=>e.classList.remove('on'));$('p-'+p).classList.add('on');scrollTo(0,0);if(p=='hist')hist();if(p=='cmp')cmp()}
+function q(id,v){$(id).value=v}
+function prev(i,t){const f=i.files[0];$(t).innerHTML=f&&f.type.startsWith('image/')?`<img src="${URL.createObjectURL(f)}" alt="preview">`:''}
+const hash=s=>[...s].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);
+const clamp=v=>Math.max(5,Math.min(98,Math.round(v)));
+const SCAM=/free|giveaway|crypto|forex|invest|earn \$|winner|dm me|whatsapp|telegram|registration fee|processing fee|training fee|deposit|gift card|otp|guaranteed|urgent|no interview|pay now|refundable/i;
+// ---------- engines (rule-based prototype; mock data clearly marked) ----------
+function engIG(u){const h=hash(u),d=(u.match(/\d/g)||[]).length,us=(u.match(/_/g)||[]).length,kw=SCAM.test(u.replace(/[_.]/g,' '));
+let img=72+h%20,txt=82,beh=72+(h>>3)%20;if(kw){txt-=45;img-=20;beh-=15}if(d>=4){beh-=25;img-=15}else if(d){beh-=12}if(us>=2){beh-=8;txt-=8}
+return{kind:'Instagram',subject:'@'+u,cats:[{n:'Image Analysis',v:clamp(img),t:img>=70?'No duplicate-image indicators in sample check; profile visuals look consistent.':'Possible copied/duplicate image indicators; visuals may be inconsistent (simulated similarity check).'},
+{n:'Text Analysis',v:clamp(txt),t:kw?'Scam-related keywords detected in the handle/bio — potentially suspicious.':'No scam-related wording or repeated/copied descriptions found in the sample.'},
+{n:'Behavior Analysis',v:clamp(beh),t:beh>=70?'Posting consistency and follower/following ratio look typical (simulated signals).':'Handle pattern and simulated follower/following signals need further verification.'}]}}
+const FREE=['gmail.com','yahoo.com','outlook.com','hotmail.com','rediffmail.com'],BR=['infosys.com','tcs.com','wipro.com','zoho.com','google.com','microsoft.com','amazon.com','accenture.com','paypal.com'];
+const CO={infosys:{d:'infosys.com',a:'electronics city, bengaluru'},tcs:{d:'tcs.com',a:'nariman point, mumbai'},zoho:{d:'zoho.com',a:'estancia it park, chennai'},wipro:{d:'wipro.com',a:'sarjapur road, bengaluru'},accenture:{d:'accenture.com',a:'olympia tech park, chennai'}};
+function lev(a,b){const m=[...Array(a.length+1)].map((_,i)=>[i,...Array(b.length).fill(0)]);for(let j=1;j<=b.length;j++)m[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]==b[j-1]?0:1));return m[a.length][b.length]}
+const norm=d=>d.replace(/rn/g,'m').replace(/vv/g,'w').replace(/0/g,'o').replace(/1/g,'l').replace(/-/g,'');
+function shot(txt,hasImg,name){if(!txt&&!hasImg)return null;const k=txt&&txt.match(SCAM);let v=txt?(k?25:82):62;return{n:name,v,t:k?`Suspicious wording found (“${esc(k[0])}”) — fee/urgency requests are a common scam signal.`:txt?'No fee, urgency or off-platform wording found in the supplied text.':'Image received. Automated OCR is not enabled in this prototype — paste the visible text for keyword analysis; manual review advised.'}}
+function engEM(e,co,txt,img){const m=e.toLowerCase().trim().match(/^[^\s@]+@([a-z0-9.-]+\.[a-z]{2,})$/),cats=[];if(!m){return{kind:'Email',subject:e||'(none)',cats:[{n:'Email Analysis',v:10,t:'Email format appears invalid.'}]}}
+const d=m[1];let ev=88,et='Valid format.',dv=85,dt='Domain looks well-formed.';
+const look=BR.find(b=>b!=d&&lev(norm(d),b)<=1&&d!==b);if(look){dv=8;dt=`Domain closely resembles “${look}” — possible look-alike/impersonation.`;ev=30;et='Spelling variation of a known brand domain detected.'}
+else if(FREE.includes(d)){dv=45;dt='Free-mail domain: reputation cannot confirm any company association.';ev=55}
+else if(/\.(xyz|top|click|work|info|buzz)$/.test(d)){dv=30;dt='Uncommon TLD often abused in scam campaigns (heuristic).'}
+else if(BR.includes(d)){dv=95;dt='Domain matches a known company domain in the prototype dataset.'}
+cats.push({n:'Email Analysis',v:ev,t:et},{n:'Domain Analysis',v:dv,t:dt});const s=shot(txt,img,'Screenshot Analysis');if(s)cats.push(s);
+if(co){const c=CO[co.toLowerCase().trim()];cats.push(c?(c.d==d?{n:'Company Verification',v:95,t:`Email domain matches ${co}'s official domain (prototype dataset).`}:{n:'Company Verification',v:20,t:`Email domain does not match ${co}'s official domain ${c.d} (prototype dataset).`}):{n:'Company Verification',v:50,t:'Company not found in the prototype dataset — could not be independently verified.'})}
+return{kind:'Email',subject:e,cats}}
+function engLI(u,co,ad,jb,txt,img){const cats=[];const ok=/linkedin\.com\/in\/[\w-]+/i.test(u)||/^[\w-]{3,}$/.test(u.trim());const dg=(u.match(/\d/g)||[]).length;
+cats.push({n:'Profile Analysis',v:!u?40:!ok?25:dg>6?50:80,t:!u?'No profile supplied.':!ok?'Profile link does not look like a LinkedIn profile URL.':dg>6?'Many digits in the slug — needs further verification.':'Profile slug format looks normal. Live profile completeness is not fetched in this prototype.'});
+const c=CO[(co||'').toLowerCase().trim()];cats.push({n:'Company Verification',v:c?92:co?45:30,t:c?'Company found in the prototype dataset with a known official website.':co?'Company not found in the prototype dataset — could not be independently verified.':'No company supplied.'});
+const am=c&&ad&&ad.toLowerCase().includes(c.a.split(',')[1].trim());cats.push({n:'Address Verification',v:am?90:ad?45:30,t:am?'✓ Address found and consistent with public listing (prototype dataset).':'⚠ Address could not be independently verified.'});
+let jv=35,jt='No job link supplied.';if(jb){const on=c&&jb.toLowerCase().includes(c.d.split('.')[0]);jv=on?92:/linkedin\.com\/jobs/.test(jb)?68:/bit\.ly|tinyurl|wa\.me|t\.me/.test(jb)?10:40;jt=on?'Job link points to the company’s official domain.':jv==68?'Posted on LinkedIn Jobs; official careers page match not confirmed.':jv==10?'Shortened/messaging link instead of an official careers page — potentially suspicious.':'Job link is not on an official company domain — needs further verification.'}cats.push({n:'Job Verification',v:jv,t:jt});
+const s=shot(txt,img,'Screenshot Analysis');if(s)cats.push(s);return{kind:'LinkedIn',subject:u||co||'(none)',cats}}
+// ---------- runner ----------
+const S={ig:{},em:{},li:{}};
+const to=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error('timeout')),ms))]);
+const SM={success:'✓ Completed',warning:'⚠ Completed — needs verification',error:'✖ Unavailable',loading:'⏳ Analyzing...',idle:'Waiting…'};
+function verr(k,m){$('s-'+k).innerHTML=`<div class="card" style="margin-top:14px;border-color:var(--y)">⚠ ${m}</div>`}
+async function run(k,mk){
+['ig','em','li'].forEach(x=>{if(x!=k)$('s-'+x).innerHTML=''});AI.mode=null;
+const my=(S[k]={id:++seq,mk,score:null,scrolled:false}),box=$('s-'+k);let base;try{base=mk()}catch(e){}
+if(!base||!base.cats||!base.cats.length){box.innerHTML=`<div class="card" style="margin-top:14px"><b class="lo">✖ Analysis could not start.</b> <button class="btn" onclick="run('${k}',S.${k}.mk)">Retry</button></div>`;return}
+const names=base.cats.map(c=>c.n),steps=['Collecting Evidence',...names,...(k=='ig'?[]:['Evidence Combination']),'Trust Score Calculation','Report Generation'];
+box.innerHTML=`<div class="card" style="margin-top:16px"><div class="steps">${steps.map((t,i)=>`<span class="st" id="st${i}">${i+1} → ${t}</span>`).join('')}</div><div class="ac">${names.map((n,i)=>`<div class="card"><b>${n}</b><div class="bar"><i id="b${i}"></i></div><span class="tag" id="bt${i}">${SM.idle}</span></div>`).join('')}</div><p class="note" style="margin-top:10px">Prototype/demo mode: rule-based analysis with mock sample data — no live verification.</p><div id="res"></div></div>`;
+const live=()=>S[k].id==my.id,stp=(i,c)=>{const e=$('st'+i);if(e)e.className='st '+c};
+stp(0,'on');await W(500);stp(0,'dn');const cats=[];
+for(let i=0;i<names.length;i++){if(!live())return;stp(i+1,'on');$('bt'+i).textContent=SM.loading;$('b'+i).style.width='60%';let c=null,st='error';
+try{c=await to(new Promise((res,rej)=>setTimeout(()=>{try{res(mk().cats.find(x=>x.n==names[i]))}catch(e){rej(e)}},650)),4000);if(!c)throw 0;st=c.v>=70?'success':'warning'}catch(e){c=null}
+if(!live())return;$('b'+i).style.width='100%';
+cats.push(c?{...c,s:st}:{n:names[i],s:'error',v:null,t:'Live verification is currently unavailable. Continuing with available evidence.'});
+$('bt'+i).innerHTML=SM[st]+(st=='error'?` <a href="#" onclick="run('${k}',S.${k}.mk);return false">Retry</a>`:'');stp(i+1,'dn')}
+let x=names.length+1;if(k!='ig'){stp(x,'on');await W(450);stp(x,'dn');x++}
+stp(x,'on');await W(500);stp(x,'dn');if(!live())return;
+const av=cats.filter(c=>c.v!=null);if(!av.length){$('res').innerHTML=`<p class="lo"><b>No evidence could be collected.</b> <button class="btn" onclick="run('${k}',S.${k}.mk)">Retry</button></p>`;return}
+stp(x+1,'on');await W(450);stp(x+1,'dn');if(!live())return;
+const Wt={'Screenshot Analysis':.8};let sw=0,sc=0;av.forEach(c=>{const w=Wt[c.n]||1;sc+=c.v*w;sw+=w});
+const r={...base,cats,score:Math.round(sc/sw),date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),id:Date.now(),missing:cats.filter(c=>c.v==null).map(c=>c.n)};
+r.reasons=[...av].sort((a,b)=>a.v-b.v).slice(0,4).map(c=>({s:c.v,t:`${c.n}: ${c.t}`}));
+if(r.missing.length)r.reasons.push({s:50,t:`Evidence unavailable: ${r.missing.join(', ')} — score uses available evidence only.`});
+H.unshift(r);last=r;my.score=r.score;$('res').innerHTML=view(r,1);anim(r.score);
+if(my.score!=null&&!my.scrolled){my.scrolled=true;setTimeout(()=>{const e=$('trust-score-result');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},150)}
+const t=L||I.en;say(t.r(r.score)+t.b[r.score>=80?2:r.score>=50?1:0])}
+function gauge(s){return`<div class="gw"><svg viewBox="0 0 200 120"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--bl2)" stroke-width="16" stroke-linecap="round"/><path id="ga" d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="${col(s)}" stroke-width="16" stroke-linecap="round" stroke-dasharray="252" stroke-dashoffset="252" style="transition:stroke-dashoffset 1.6s ease"/></svg><div class="num ${bandC(s)}" style="margin-top:-56px"><span id="gn">0</span> / 100</div><div class="band ${bandC(s)}">${bandT(s)}</div></div>`}
+function anim(s){requestAnimationFrame(()=>setTimeout(()=>{const g=$('ga');if(g)g.style.strokeDashoffset=252*(1-s/100);const n=$('gn');let t0=performance.now();const f=t=>{const p=Math.min(1,(t-t0)/1600);if(n)n.textContent=Math.round(s*p);if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)},50))}
+const ico=v=>v==null?'⚠️':v>=80?'✅':v>=50?'⚠️':'❌';
+function comp(r){const info=`<p class="note">You can complain to the Cybersecurity authorities if you believe this profile is fraudulent or harmful.</p>`;
+if(r.score>=80)return`<div class="card" style="margin-top:12px"><b class="hi">🟢 HIGH TRUST</b><br><b>Cybersecurity Complaint: RESTRICTED</b><p class="tag">Complaint access is restricted because the available evidence currently indicates high trust. See <a href="#" onclick="go('help');return false">Help &amp; Safety</a>.</p></div>`+info;
+if(r.score>=50)return`<div class="card" style="margin-top:12px"><b class="md">🟡 MEDIUM TRUST</b><br><b>Cybersecurity Complaint: LIMITED / REVIEW REQUIRED</b><p class="tag">Additional verification is recommended before submitting a complaint.</p><button class="btn o" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">I have read this — expand</button><div style="display:none;margin-top:8px"><button class="btn d" onclick="cmp(${r.id});go('cmp')">Submit Cybersecurity Complaint</button></div></div>`+info;
+return`<div class="card" style="border-color:var(--r);margin-top:12px"><b class="lo">🔴 LOW TRUST</b> · <b>⚠ Potentially Suspicious</b><p class="tag">Cybersecurity Complaint</p><button class="btn d" onclick="cmp(${r.id});go('cmp')">Submit Cybersecurity Complaint</button></div>`+info}
+function view(r,short){return`<div class="card" ${short?'id="trust-score-result"':''} style="margin-top:14px">${gauge(r.score)}<p class="note">Evidence-based prototype score — not proof that an account is genuine or fake. Signals indicate ${r.score>=80?'higher':r.score>=50?'mixed':'lower'} trust.</p><h2 style="margin-top:14px">Why this score?</h2>${r.reasons.map(x=>`<div class="li"><span>${ico(x.s)}</span><span>${esc(x.t)}</span></div>`).join('')}${short?`<h2 style="margin-top:14px">Verification details</h2>${r.cats.map(c=>`<div class="li"><span>${ico(c.v)}</span><span><b>${c.n}</b>: ${c.v==null?'⚠ Unable to verify with live data':esc(c.t)}</span></div>`).join('')}`:''}${comp(r)}${short?`<div class="row noprint" style="margin-top:12px"><button class="btn" onclick="rep(${r.id})">View Detailed Report</button></div>`:''}</div>`}
+function rep(id){const r=H.find(x=>x.id==id);if(!r)return;go('rep');const nx=r.score<50?['Do not share personal or payment details.','Verify identity through official channels.','Consider filing a cybersecurity complaint.']:r.score<80?['Verify the missing signals through official websites.','Avoid sharing sensitive data until confirmed.']:['Signals look healthy; still stay alert to unusual requests.'];
+$('rep').innerHTML=`<h1>Detailed Report</h1><div class="card"><b>${r.kind}</b> · ${esc(r.subject)} · ${r.date}</div>${view(r,0)}<div class="card" style="margin-top:14px"><h2>Evidence by category</h2>${r.cats.map(c=>`<div class="li"><span>${ico(c.v)}</span><span><b>${c.n} — ${c.v==null?'unavailable':c.v+'/100'}</b><br>${esc(c.t)}</span></div>`).join('')}<h2 style="margin-top:14px">Recommended next steps</h2>${nx.map(x=>`<div class="li"><span>➡️</span>${x}</div>`).join('')}<p class="note">Data sources: rule-based engine + prototype mock dataset. No live API results.</p><button class="btn noprint" onclick="print()">Download Report (PDF)</button></div>`;anim(r.score)}
+function hist(){const s=$('hq').value.toLowerCase(),f=$('hf').value;$('ht').innerHTML='<tr><th>Platform</th><th>Subject</th><th>Date</th><th>Score</th><th>Status</th><th></th></tr>'+H.filter(r=>(!f||r.kind==f)&&r.subject.toLowerCase().includes(s)).map(r=>`<tr><td>${r.kind}</td><td>${esc(r.subject)}</td><td>${r.date}</td><td>${r.score}/100</td><td><span class="pill" style="background:${col(r.score)}">${bandT(r.score)}</span></td><td><button class="chip" onclick="rep(${r.id})">View</button> <button class="chip" onclick="H=H.filter(x=>x.id!=${r.id});hist()">Delete</button></td></tr>`).join('')}
+function cmp(id){const r=H.find(x=>x.id==id)||last||{kind:'',subject:'',score:'',reasons:[]};if(r.score!==''&&r.score>=80){$('cf').innerHTML='<b class="hi">🟢 Cybersecurity Complaint: RESTRICTED</b><p class="tag">Complaint access is restricted because the available evidence currently indicates high trust.</p>';return}const sum=(r.reasons||[]).map(x=>x.t).join(' ');$('cf').innerHTML=`<label>Platform</label><input id="c1" value="${r.kind}"><label>Username / Profile URL</label><input id="c2" value="${esc(r.subject)}"><label>Email</label><input id="c3"><label>Company Name</label><input id="c4"><label>Reason for Report</label><textarea id="c5" rows="2">Potentially suspicious profile identified via TRUSTCARD.</textarea><label>Evidence / Screenshot</label><input type="file" accept="image/*"><label>Trust Score</label><input value="${r.score}${r.score!==''?'/100':''}" readonly><label>Analysis Summary</label><textarea rows="4">${esc(sum)}</textarea><button class="btn" onclick="$('cd').style.display='block'">Prepare Complaint Draft</button><div id="cd" style="display:none;margin-top:12px"><b class="hi">Complaint draft prepared successfully.</b><p class="note">Nothing has been submitted. Integration point: connect an official reporting API here if one is available; otherwise open the official portal and paste this draft.</p><button class="btn" onclick="window.open('https://cybercrime.gov.in','_blank','noopener')">OPEN OFFICIAL REPORTING CHANNEL</button> <button class="btn o" onclick="exp()">EXPORT COMPLAINT DETAILS</button></div>`}
+// ---------- page actions ----------
+function runIG(){const u=$('igu').value.trim().replace(/^@/,'').toLowerCase();if(!/^[a-z0-9._]{1,30}$/.test(u)){verr('ig','Enter a valid Instagram username (letters, numbers, . and _; max 30).');return $('igu').focus()}run('ig',()=>engIG(u))}
+function runEM(){const e=$('eme').value.trim();if(!/^[^\s@]+@[^\s@]+$/.test(e)){verr('em','Enter an email address (e.g. name@company.com) — a screenshot alone is not enough.');return $('eme').focus()}const co=$('emc').value,tx=$('emt').value,im=$('emf').files.length;run('em',()=>engEM(e,co,tx,im))}
+function runLI(){const u=$('liu').value.trim(),c=$('lic').value.trim();if(!u&&!c){verr('li','Enter a LinkedIn profile or a company name.');return $('liu').focus()}const a=$('lia').value,j=$('lij').value,t=$('lit').value,im=$('lif').files.length;run('li',()=>engLI(u,c,a,j,t,im))}
+function demoEm(i){$('eme').value=['hr@infosys.com','careers@infosy5.com'][i];$('emc').value='Infosys';$('emt').value=i?'Congratulations! Urgent: pay the registration fee today, contact us on WhatsApp. No interview needed.':'Thank you for applying. Your interview is scheduled for Monday via the official careers portal.'}
+function demoLi(i){[['linkedin.com/in/ananya-rao','Zoho','Estancia IT Park, Chennai','https://careers.zoho.com/jobs/123','Interview invite via company portal.'],['linkedin.com/in/hr-jobs-9981234','Global Tech Solutions','12 Unknown Street','https://bit.ly/3xJob','Guaranteed job! Pay refundable deposit via gift card. Telegram only.']][i].forEach((v,j)=>$(['liu','lic','lia','lij','lit'][j]).value=v)}
+H=[{kind:'Instagram',subject:'@example',date:'28 Sep 2026',score:32,id:1,cats:[{n:'Text Analysis',v:30,t:'Scam-related keywords detected (sample record).'}],reasons:[{s:30,t:'Sample record for demo history.'}]},{kind:'Email',subject:'hr@infosys.com',date:'27 Sep 2026',score:91,id:2,cats:[{n:'Domain Analysis',v:95,t:'Matches known domain (sample record).'}],reasons:[{s:95,t:'Sample record for demo history.'}]},{kind:'LinkedIn',subject:'linkedin.com/in/sample',date:'26 Sep 2026',score:61,id:3,cats:[{n:'Address Verification',v:45,t:'Address could not be independently verified (sample record).'}],reasons:[{s:45,t:'Sample record for demo history.'}]}];
+setTimeout(()=>{$('tip').style.display='block'},400);
+</script>
+<style>#cur{position:fixed;left:0;top:0;width:22px;height:22px;border-radius:50%;background:rgba(29,95,224,.85);border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.35);z-index:99;pointer-events:none;display:none;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+#cur.k{animation:rp .4s}@keyframes rp{50%{box-shadow:0 0 0 16px rgba(29,95,224,.25)}}
+#cap{position:fixed;top:calc(70px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:#0b1f44;color:#fff;padding:9px 18px;border-radius:99px;font-size:14px;font-weight:600;z-index:98;display:none;max-width:92vw;text-align:center}
+#tour{position:fixed;left:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50}</style>
+<div id="cur"></div><div id="cap"></div><button class="btn noprint" id="tour" onclick="tour()">▶ Auto Demo (record me)</button>
+<script>
+const W=ms=>new Promise(r=>setTimeout(r,ms));
+const vis=t=>[...document.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith(t)&&b.getClientRects().length);
+const cap=t=>{const c=$('cap');c.textContent=t;c.style.display='block'};
+async function mv(el){el.scrollIntoView({block:'center',behavior:'smooth'});await W(600);const r=el.getBoundingClientRect();$('cur').style.transform=`translate(${r.left+r.width/2-11}px,${r.top+r.height/2-11}px)`;await W(800)}
+async function clk(t){const el=typeof t=='string'?vis(t):t;if(!el)return;await mv(el);$('cur').classList.add('k');el.click();await W(450);$('cur').classList.remove('k')}
+async function typ(id,txt){const i=$(id);i.value='';for(const ch of txt){i.value+=ch;await W(70)}}
+async function tour(){$('tour').style.display='none';$('cur').style.display='block';$('cur').style.transform='translate(40vw,40vh)';
+cap('Welcome to TRUSTCARD — Verify Before You Trust.');go('home');await W(2500);
+cap('Mini AI assistant — pick a language');if(!$('panel').classList.contains('on'))await clk('🤖');await W(1200);await clk('English');
+cap('User: “Instagram profile check”');await typ('cin','Instagram profile check');await clk('➤');await W(1800);
+cap('User gives the username — field auto-fills');await typ('cin','priya.designs');await clk('➤');await W(1500);
+cap('Instagram check #1 — expected HIGH TRUST');await clk('▶ RUN');await W(6500);
+await clk('🤖');go('ig');cap('Instagram check #2 — MEDIUM TRUST');await clk('Medium');await clk('▶ RUN');await W(6500);
+cap('Instagram check #3 — LOW TRUST (scam-style handle)');await clk('Low');await clk('▶ RUN');await W(6500);
+cap('Low score → complaint workflow');await clk('Submit Cybersecurity Complaint');await W(1200);await clk('Prepare Complaint Draft');await W(2500);
+go('em');cap('Email check — legitimate company email');await clk('Legitimate');await clk('▶ RUN');await W(6500);
+cap('Email check — look-alike domain + scam wording');await clk('Look-alike');await clk('▶ RUN');await W(6500);
+cap('Switching Mini AI to Tamil (தமிழ்)');await clk('🤖');await W(500);setLang('ta');await W(1500);await clk('🤖');
+go('li');cap('LinkedIn — verified company (result read out in Tamil)');await clk('Verified company');await clk('▶ RUN');await W(6500);
+cap('LinkedIn — suspicious job offer');await clk('Suspicious offer');await clk('▶ RUN');await W(6500);
+go('hist');cap('Verification history — search, filter, view');await W(2500);await clk('View');await W(1500);cap('Detailed report with evidence & next steps');await W(4000);
+cap('TRUSTCARD — Verify Before You Trust.');go('home');await W(3000);$('cap').style.display='none';$('cur').style.display='none';$('tour').style.display='block'}
+if(location.search.includes('autoplay'))setTimeout(tour,1200);
+</script></body></html>
